@@ -8,6 +8,7 @@ class InputFiledForAuth extends StatelessWidget {
     required this.textDirection,
     this.iconButton,
     this.isHidden,
+    required this.controller,
   });
 
   final String text;
@@ -15,10 +16,12 @@ class InputFiledForAuth extends StatelessWidget {
   final TextDirection textDirection;
   final IconButton? iconButton;
   final bool? isHidden;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       textDirection: textDirection,
       keyboardType: keyboardType,
       cursorColor: Colors.black,
