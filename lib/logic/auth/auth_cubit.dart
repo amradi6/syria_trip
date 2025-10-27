@@ -1,22 +1,19 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syri_trip/logic/auth/auth_state.dart';
 import 'package:http/http.dart' as http;
 
-
 class AuthCubit extends Cubit<AuthState> {
-
   AuthCubit() : super(AuthInitial());
 
-  final TextEditingController _name= TextEditingController();
+  final TextEditingController _name = TextEditingController();
 
-  final TextEditingController _email= TextEditingController();
+  final TextEditingController _email = TextEditingController();
 
-  final TextEditingController _password= TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
-  final TextEditingController _phoneNumber= TextEditingController();
+  final TextEditingController _phoneNumber = TextEditingController();
 
   TextEditingController get name => _name;
 
@@ -26,15 +23,18 @@ class AuthCubit extends Cubit<AuthState> {
 
   TextEditingController get phoneNumber => _phoneNumber;
 
-  Future<void> signup({required String email, required String password, required String name, required String phone}) async{
-    try{
+  Future<void> signup({
+    required String email,
+    required String password,
+    required String name,
+    required String phone,
+  }) async {
+    try {
       emit(SignupLoading());
       final uri = Uri.parse("http://10.0.2.2:8080/auth/signup");
       final response = await http.post(
         uri,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "email": email,
           "password": password,
@@ -42,14 +42,15 @@ class AuthCubit extends Cubit<AuthState> {
           "phoneNumber": phone,
         }),
       );
-      if(response.statusCode==200){
-        emit(SignupSuccess());
+      if (response.statusCode == 200) {
+        emit(SignupSuccess(response.body));
+      } else {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        final String errorMessage = data['message'] ?? "حدث خطأ غير معروف";
+        emit(SignupError(errorMessage));
       }
-      else{
-        emit(SignupError("فشل التسجيل: ${response.statusCode}"));
-      }
-    }catch(e){
-      emit(SignupError("حدث خطأ:${e..toString()}"));
+    } catch (e) {
+      emit(SignupError(e.toString()));
     }
   }
 }

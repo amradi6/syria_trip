@@ -52,7 +52,7 @@ class ColumnFiledForAuth extends StatelessWidget {
             InputFiledForAuth(
               controller: context.read<AuthCubit>().password,
               text: "الرجاء ادخال كلمة السر",
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.visiblePassword,
               textDirection: TextDirection.ltr,
               iconButton: IconButton(
                 onPressed: () {},

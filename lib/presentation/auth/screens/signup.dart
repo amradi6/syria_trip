@@ -19,7 +19,7 @@ class Signup extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: size.width * 0.036,
-              vertical: 80,
+              vertical: size.height * 0.087,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,20 +50,36 @@ class Signup extends StatelessWidget {
                 SizedBox(height: size.height * 0.032),
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
-                    if(state is SignupSuccess){
+                    if (state is SignupSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('تم إنشاء الحساب بنجاح 🎉')),
+                        SnackBar(
+                          content: Text(
+                            state.message,
+                            textDirection: TextDirection.rtl,
+                          ),
+                          showCloseIcon: true,
+                          closeIconColor: Colors.red,
+                        ),
                       );
                     } else if (state is SignupError) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('حدث خطأ: ${state.message}')),
+                        SnackBar(
+                          content: Text(
+                            'حدث خطأ: ${state.message}',
+                            textDirection: TextDirection.rtl,
+                          ),
+                          showCloseIcon: true,
+                          closeIconColor: Colors.red,
+                        ),
                       );
                     }
                   },
                   builder: (context, state) {
                     if (state is SignupLoading) {
                       return const Center(
-                        child: CircularProgressIndicator(color: Colors.blueAccent),
+                        child: LinearProgressIndicator(
+                          color: Colors.blueAccent,
+                        ),
                       );
                     }
                     return ElevatedButton(

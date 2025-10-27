@@ -10,4 +10,8 @@ final class SignupError extends AuthState {
   SignupError(this.message);
 }
 
-final class SignupSuccess extends AuthState {}
+final class SignupSuccess extends AuthState {
+  final String message;
+
+  SignupSuccess(this.message);
+}
