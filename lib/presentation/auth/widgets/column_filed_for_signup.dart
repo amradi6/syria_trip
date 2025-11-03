@@ -5,8 +5,8 @@ import 'package:syri_trip/logic/auth/auth_state.dart';
 import 'package:syri_trip/presentation/auth/widgets/input_filed_for_auth.dart';
 import 'package:syri_trip/presentation/auth/widgets/label_for_auth.dart';
 
-class ColumnFiledForAuth extends StatelessWidget {
-  const ColumnFiledForAuth({super.key, required this.size});
+class ColumnFiledForSignup extends StatelessWidget {
+  const ColumnFiledForSignup({super.key, required this.size});
 
   final Size size;
 
@@ -54,9 +54,14 @@ class ColumnFiledForAuth extends StatelessWidget {
               text: "الرجاء ادخال كلمة السر",
               keyboardType: TextInputType.visiblePassword,
               textDirection: TextDirection.ltr,
+              isHidden: context.read<AuthCubit>().isHiddenForSignup,
               iconButton: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.remove_red_eye),
+                onPressed: () {
+                  context.read<AuthCubit>().togglePasswordVisibilityForSignup();
+                },
+                icon: context.read<AuthCubit>().isHiddenForSignup
+                    ? Icon(Icons.visibility_off)
+                    : Icon(Icons.remove_red_eye),
               ),
             ),
           ],

@@ -4,7 +4,12 @@ import 'package:syri_trip/logic/auth/auth_cubit.dart';
 import 'package:syri_trip/presentation/auth/screens/signup.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [BlocProvider(create: (context) => AuthCubit())],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,12 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MultiBlocProvider(
-        providers: [BlocProvider(create: (context) => AuthCubit())],
-        child: Signup(),
-      ),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: Signup());
   }
 }

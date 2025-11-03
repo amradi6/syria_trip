@@ -9,19 +9,35 @@ class AuthCubit extends Cubit<AuthState> {
 
   final TextEditingController _name = TextEditingController();
 
-  final TextEditingController _email = TextEditingController();
+  final TextEditingController _emailForSignup = TextEditingController();
 
-  final TextEditingController _password = TextEditingController();
+  final TextEditingController _passwordForSignup = TextEditingController();
 
   final TextEditingController _phoneNumber = TextEditingController();
 
+  final TextEditingController _emailForLogin = TextEditingController();
+
+  final TextEditingController _passwordForLogin = TextEditingController();
+
+  bool isHidden = false;
+
+  bool isHidden1 = false;
+
   TextEditingController get name => _name;
 
-  TextEditingController get email => _email;
+  TextEditingController get email => _emailForSignup;
 
-  TextEditingController get password => _password;
+  TextEditingController get password => _passwordForSignup;
 
   TextEditingController get phoneNumber => _phoneNumber;
+
+  TextEditingController get emailForLogin => _emailForLogin;
+
+  TextEditingController get passwordForLogin => _passwordForLogin;
+
+  bool get isHiddenForSignup => isHidden;
+
+  bool get isHiddenForLogin => isHidden1;
 
   Future<void> signup({
     required String email,
@@ -52,5 +68,34 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (e) {
       emit(SignupError(e.toString()));
     }
+  }
+
+  Future<void> login({required String email, required String password}) async {
+    try {
+      emit(LoginLoading());
+      final url = Uri.parse("http://10.0.2.2:8080/auth/login");
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"email": email, "password": password}),
+      );
+      if (response.statusCode == 200) {
+        emit(LoginSuccess(response.body));
+      } else {
+        emit(LoginError(response.body));
+      }
+    } catch (e) {
+      emit(LoginError(e.toString()));
+    }
+  }
+
+  void togglePasswordVisibilityForSignup() {
+    isHidden = !isHidden;
+    emit(PasswordVisibilityChangedForSignup(isHidden));
+  }
+
+  void togglePasswordVisibilityForLogin() {
+    isHidden1 = !isHidden1;
+    emit(PasswordVisibilityChangedForSignup(isHidden1));
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syri_trip/logic/auth/auth_cubit.dart';
 import 'package:syri_trip/logic/auth/auth_state.dart';
 import 'package:syri_trip/presentation/auth/widgets/auth_toggle_button.dart';
-import 'package:syri_trip/presentation/auth/widgets/column_filed_for_auth.dart';
+import 'package:syri_trip/presentation/auth/widgets/column_filed_for_signup.dart';
 
 class Signup extends StatelessWidget {
   const Signup({super.key});
@@ -22,7 +22,6 @@ class Signup extends StatelessWidget {
               vertical: size.height * 0.087,
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Icon(
                   Icons.directions_bus_rounded,
@@ -44,9 +43,9 @@ class Signup extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: size.height * 0.0218),
-                const AuthToggleButton(),
+                const AuthToggleButton(selectedIndex: 0),
                 SizedBox(height: size.height * 0.027),
-                ColumnFiledForAuth(size: size),
+                ColumnFiledForSignup(size: size),
                 SizedBox(height: size.height * 0.032),
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {

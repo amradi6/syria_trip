@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:syri_trip/presentation/auth/screens/login.dart';
+import 'package:syri_trip/presentation/auth/screens/signup.dart';
 
-class AuthToggleButton extends StatefulWidget {
-  const AuthToggleButton({super.key});
+class AuthToggleButton extends StatelessWidget {
+  const AuthToggleButton({super.key, required this.selectedIndex});
 
-  @override
-  State<AuthToggleButton> createState() => _AuthToggleButtonState();
-}
-
-class _AuthToggleButtonState extends State<AuthToggleButton> {
-  int _selectedIndex = 1;
+  final int selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +23,17 @@ class _AuthToggleButtonState extends State<AuthToggleButton> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _selectedIndex = 0;
-                  });
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Signup()),
+                  );
+                  // setState(() {
+                  //   _selectedIndex = 0;
+                  // });
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: _selectedIndex == 0
+                    color: selectedIndex == 0
                         ? Colors.white
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(25),
@@ -41,7 +42,7 @@ class _AuthToggleButtonState extends State<AuthToggleButton> {
                     child: Text(
                       'تسجيل الدخول',
                       style: TextStyle(
-                        fontWeight: _selectedIndex == 0
+                        fontWeight: selectedIndex == 0
                             ? FontWeight.bold
                             : FontWeight.normal,
                       ),
@@ -53,13 +54,17 @@ class _AuthToggleButtonState extends State<AuthToggleButton> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()),
+                  );
+                  // setState(() {
+                  //   selectedIndex = 1;
+                  // });
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: _selectedIndex == 1
+                    color: selectedIndex == 1
                         ? Colors.white
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(25),
@@ -68,7 +73,7 @@ class _AuthToggleButtonState extends State<AuthToggleButton> {
                     child: Text(
                       'اشتراك',
                       style: TextStyle(
-                        fontWeight: _selectedIndex == 1
+                        fontWeight: selectedIndex == 1
                             ? FontWeight.bold
                             : FontWeight.normal,
                       ),
