@@ -4,6 +4,7 @@ import 'package:syri_trip/logic/auth/auth_cubit.dart';
 import 'package:syri_trip/logic/auth/auth_state.dart';
 import 'package:syri_trip/presentation/auth/widgets/auth_toggle_button.dart';
 import 'package:syri_trip/presentation/auth/widgets/column_filed_for_signup.dart';
+import 'package:syri_trip/presentation/main/screens/show_company.dart';
 
 class Signup extends StatelessWidget {
   const Signup({super.key});
@@ -60,7 +61,9 @@ class Signup extends StatelessWidget {
                           closeIconColor: Colors.red,
                         ),
                       );
-                    } else if (state is SignupError) {
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ShowCompany(),));
+                    } 
+                    else if (state is SignupError) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(

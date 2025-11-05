@@ -13,6 +13,8 @@ dependencies:
   block: ^0.0.3
   flutter_bloc: ^9.1.1
   http: ^1.5.0
+  shared_preferences: ^2.5.3
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

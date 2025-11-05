@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syri_trip/logic/auth/auth_cubit.dart';
 import 'package:syri_trip/logic/auth/auth_state.dart';
 import 'package:syri_trip/presentation/auth/widgets/column_filed_for_login.dart';
+import 'package:syri_trip/presentation/main/screens/show_company.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -33,6 +34,7 @@ class Login extends StatelessWidget {
                        closeIconColor: Colors.red,
                      ),
                    );
+                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ShowCompany(),));
                 }
                 else if (state is LoginError) {
                   ScaffoldMessenger.of(context).showSnackBar(

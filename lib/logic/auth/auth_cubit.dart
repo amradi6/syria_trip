@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syri_trip/logic/auth/auth_state.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,6 +23,10 @@ class AuthCubit extends Cubit<AuthState> {
   bool isHidden = false;
 
   bool isHidden1 = false;
+
+  String nameForShow = "";
+
+  int? userId;
 
   TextEditingController get name => _name;
 
@@ -45,6 +50,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String name,
     required String phone,
   }) async {
+    final prefs = await SharedPreferences.getInstance();
     try {
       emit(SignupLoading());
       final uri = Uri.parse("http://10.0.2.2:8080/auth/signup");
@@ -58,12 +64,18 @@ class AuthCubit extends Cubit<AuthState> {
           "phoneNumber": phone,
         }),
       );
+      final data = jsonDecode(response.body);
+      String message = data['message'];
+
       if (response.statusCode == 200) {
-        emit(SignupSuccess(response.body));
+        final user = data['user'];
+        userId = user['id'];
+        nameForShow = user['name'];
+        await prefs.setInt('userId', userId!);
+        await prefs.setString('nameForShow', nameForShow);
+        emit(SignupSuccess(message));
       } else {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        final String errorMessage = data['message'] ?? "حدث خطأ غير معروف";
-        emit(SignupError(errorMessage));
+        emit(SignupError(message));
       }
     } catch (e) {
       emit(SignupError(e.toString()));
@@ -79,14 +91,27 @@ class AuthCubit extends Cubit<AuthState> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({"email": email, "password": password}),
       );
+      final data = jsonDecode(response.body);
+      final String message = data['message'];
       if (response.statusCode == 200) {
-        emit(LoginSuccess(response.body));
+        emit(LoginSuccess(message));
       } else {
-        emit(LoginError(response.body));
+        emit(LoginError(message));
       }
     } catch (e) {
       emit(LoginError(e.toString()));
     }
+  }
+
+  Future<int?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('userId');
+  }
+
+  Future<String?> getName() async {
+    final prefs = await SharedPreferences.getInstance();
+    nameForShow = prefs.getString('nameForShow') ?? "";
+    return nameForShow;
   }
 
   void togglePasswordVisibilityForSignup() {

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syri_trip/logic/auth/auth_cubit.dart';
+import 'package:syri_trip/logic/main/main_cubit.dart';
 import 'package:syri_trip/presentation/auth/screens/signup.dart';
 
 void main() {
   runApp(
     MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => AuthCubit())],
+      providers: [
+        BlocProvider(create: (context) => AuthCubit()),
+        BlocProvider(create: (context) => MainCubit()),
+      ],
       child: const MyApp(),
     ),
   );
