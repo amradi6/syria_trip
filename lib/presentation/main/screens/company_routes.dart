@@ -12,27 +12,25 @@ class CompanyRoutesScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "رحلات الشركة",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,
       ),
       body: BlocBuilder<MainCubit, MainState>(
+        buildWhen: (previous, current) {
+          return current is CompanyRouteSuccess || current is CompanyRouteError || current is CompanyRouteLoading;
+        },
         builder: (context, state) {
           if (state is CompanyRouteLoading) {
             return const Center(child: CircularProgressIndicator());
-          }
-          else if (state is CompanyRouteError) {
+          } else if (state is CompanyRouteError) {
             return Center(
               child: Text(
                 state.message,
                 style: const TextStyle(color: Colors.red, fontSize: 18),
               ),
             );
-          }
-          else if (state is CompanyRouteSuccess) {
+          } else if (state is CompanyRouteSuccess) {
             final routes = state.routes;
 
             if (routes.isEmpty) {

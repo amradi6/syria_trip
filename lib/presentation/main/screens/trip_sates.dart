@@ -38,7 +38,6 @@ class _TripSeatsState extends State<TripSeats> {
             for (int i = 0; i < seats.length; i += 3) {
               rows.add(seats.skip(i).take(3).toList());
             }
-
             return Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -70,7 +69,7 @@ class _TripSeatsState extends State<TripSeats> {
                   ElevatedButton(
                     onPressed: () {
                       final selected = seats
-                          .where((s) => s['selected'] == false)
+                          .where((s) => s['selected'] == true)
                           .toList();
                       if (selected.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(

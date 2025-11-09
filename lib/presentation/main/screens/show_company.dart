@@ -109,7 +109,7 @@ class _ShowCompanyState extends State<ShowCompany> {
           if (userId != null) {
             context.read<MainCubit>().fetchBalance(userid: userId);
           }
-          }),
+        }),
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
@@ -290,7 +290,10 @@ class _ShowCompanyState extends State<ShowCompany> {
                       return Center(
                         child: Text(
                           state.message,
-                          style: const TextStyle(color: Colors.red, fontSize: 18),
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 18,
+                          ),
                         ),
                       );
                     }
