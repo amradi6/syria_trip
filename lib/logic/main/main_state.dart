@@ -50,3 +50,15 @@ final class CompanyRouteError extends MainState{
   final String message;
   CompanyRouteError(this.message);
 }
+
+final class SeatsLoading extends MainState{}
+
+final class SeatsSuccess extends MainState{
+  final List<dynamic> seats;
+  SeatsSuccess(this.seats);
+}
+
+final class SeatsError extends MainState{
+  final String message;
+  SeatsError(this.message);
+}

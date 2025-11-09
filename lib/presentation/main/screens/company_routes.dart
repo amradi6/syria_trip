@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syri_trip/logic/main/main_cubit.dart';
+import 'package:syri_trip/presentation/main/screens/trip_sates.dart';
 
 class CompanyRoutesScreen extends StatelessWidget {
   const CompanyRoutesScreen({super.key});
@@ -8,7 +9,16 @@ class CompanyRoutesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("رحلات الشركة")),
+      appBar: AppBar(
+        title: const Text(
+          "رحلات الشركة",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: BlocBuilder<MainCubit, MainState>(
         builder: (context, state) {
           if (state is CompanyRouteLoading) {
@@ -29,7 +39,6 @@ class CompanyRoutesScreen extends StatelessWidget {
               return const Center(child: Text("لا توجد رحلات متاحة حالياً"));
             }
 
-            // الـ API يُرجع Map يحتوي تواريخ كمفاتيح
             final dateKeys = routes.keys.toList();
 
             return ListView.builder(
@@ -42,6 +51,9 @@ class CompanyRoutesScreen extends StatelessWidget {
                   title: Text("📅 التاريخ: $date"),
                   children: dayRoutes.map((r) {
                     return ListTile(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => TripSeats(routeId: r["id"],),));
+                      },
                       title: Text("${r["fromCity"]} → ${r["toCity"]}"),
                       subtitle: Text("السعر: ${r["price"]} ل.س"),
                       trailing: Text(

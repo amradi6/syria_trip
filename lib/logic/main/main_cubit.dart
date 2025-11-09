@@ -11,19 +11,21 @@ class MainCubit extends Cubit<MainState> {
 
   double? currentBalance;
 
+  List<dynamic> seats = [];
+
   Future<void> fetchBalance({required int userid}) async {
-    try{
-    emit(BalanceLoading());
-    final url = Uri.parse("http://10.0.2.2:8080/balance/$userid");
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final balance = double.tryParse(response.body) ?? 0.0;
-      currentBalance = balance;
-      emit(BalanceSuccess(balance));
-    } else {
-      emit(BalanceError("فشل في جلب الرصيد"));
-    }
-    }catch(e){
+    try {
+      emit(BalanceLoading());
+      final url = Uri.parse("http://10.0.2.2:8080/balance/$userid");
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final balance = double.tryParse(response.body) ?? 0.0;
+        currentBalance = balance;
+        emit(BalanceSuccess(balance));
+      } else {
+        emit(BalanceError("فشل في جلب الرصيد"));
+      }
+    } catch (e) {
       emit(BalanceError(e.toString()));
     }
   }
@@ -81,6 +83,41 @@ class MainCubit extends Cubit<MainState> {
       }
     } catch (e) {
       emit(CompanyError(e.toString()));
+    }
+  }
+
+  Future<void> fetchSeats({required int routeId}) async {
+    emit(SeatsLoading());
+    try {
+      final url = Uri.parse(
+        "http://10.0.2.2:8080/seats/by-trip?routeId=$routeId",
+      );
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        emit(SeatsSuccess(data));
+      } else {
+        emit(SeatsError("فشل في تحميل المقاعد"));
+      }
+    } catch (e) {
+      emit(SeatsError(e.toString()));
+    }
+  }
+
+  void selectSeat(int seatId) {
+    if (state is SeatsSuccess) {
+      final seats = List<Map<String, dynamic>>.from(
+        (state as SeatsSuccess).seats,
+      );
+
+      final updatedSeats = seats.map((s) {
+        if (s['id'] == seatId && (s['booked'] == false)) {
+          return {...s, 'selected': !(s['selected'] ?? false)};
+        }
+        return s;
+      }).toList();
+
+      emit(SeatsSuccess(updatedSeats));
     }
   }
 }
